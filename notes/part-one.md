@@ -1,6 +1,6 @@
 # Fixed Size Data
 ## 1.1 The Arithmetic of Numbers
-Refresher: In Racket, we call functions using the syntax
+In Racket, we call functions using the syntax
 ```
 (function arg1 arg2 ... argn)
 ```
@@ -47,4 +47,15 @@ Examples of type predicates: `number?`, `string?`, `image?`, `boolean?`.
 Examples of numeric predicates:
 `integer?`, `rational?`, `real?`, `complex?`
 
-##
+## 2.1 Functions
+Two types of definitions in Racket:
+- Constant definitions `(define variable Expression)`
+- Function definition `(FunctionName Arg1 .. ArgN Expression)`
+    - Example function that multiplies input by 10: 
+    
+        ``` scheme
+        (define (ff a)
+        (* 10 a))
+        ```
+
+## 2.2 Computing
