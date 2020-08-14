@@ -4,3 +4,6 @@
 (/ 2 3)
 ( sqrt 2 )
 
+(+ (image-width (circle 10 "solid" "red")) ; width = 20
+   (image-height (rectangle 10 20 "solid" "blue"))) ; height = 20
+; = 40
