@@ -58,4 +58,41 @@ Two types of definitions in Racket:
         (* 10 a))
         ```
 
-## 2.2 Computing
+## 2.5 Programs
+Programs are just a bunch of functions and constant definitions.
+- Batch program: Consume inputs and computes a result
+- Interactive program: Takes input, output, then takes more input, outputs more, etc. Such inputs are called "events" and the program is called an "event-driven" program. The event-driven program calls various functions depending on the event, which are called "event handlers".
+
+### Batch programs
+Use `(require 2htdp/batch-io)` to import functions for reading/writing files
+
+To read and write files:
+``` scheme
+(write-file "sample.dat" "212")
+"sample.dat"
+
+(read-file "sample.dat")
+"212"
+```
+
+
+## 3.1 Designing Functions
+Model-view-controller (MVC): Separating data processing from information parsing, turning data into useful information.
+
+Key concept - separation of data and information
+
+A number can mean many things - temperature in Celsius or Fahrenheit, number of apples, number of characters in a string. Therefore, it is useful to provide a **data definition**:
+``` scheme
+; A Temperature is a Number.
+; interpretation: represents Celsius degrees
+```
+
+When designing a function, write out what types of data it takes in, followed by `->` and the output type, and what it does in plain English. For example:
+``` scheme
+; Number -> Number
+; computes the area of a square with side len 
+; given: 2, expect: 4
+; given: 7, expect: 49
+(define (area-of-square len) 0)
+```
+
