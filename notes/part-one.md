@@ -138,7 +138,7 @@ It is recommended to use the `else` clause in `cond` to avoid unexpected behavio
 Finite state machine / automata: A system with a set number of states which transition into other states. 
 
 **Example**: A traffic light which ONLY transitions from red to green, green to orange, and orange to red. 
-<img src="trafficLight.png">
+<img src="images/trafficLight.png">
 
 ## 5.4 Defining Structure Types
 Structures like `posn` (a struct with x and y attributes) are defined using `define-struct`. This is how `posn` is defined:
@@ -158,3 +158,74 @@ The names enclosed in square brackets are called *fields*. A structure that has 
 - A selector per field, a function which extracts the value of the field from the structure instance. **It's always `struct-field`, the struct name, followed by a hyphen, followed by the field name, followed by the structure instance (e.g. `(posn-x myCoord)`)**.
 - A structure predicate, a function that tells if an instance is of the structure type. **It's always the `struct?`, the struct name with a question mark, followed by the structure instance (e.g. `(posn? myCoord)`)**
 
+Example code using structs:
+``` scheme
+(define-struct entry [name phone email]) ; Define "entry" struct type with 3 fields: name, phone, email
+(define a (make-entry "Al Abe" "666-7771" "lee@x.me"))  ; Create struct instance
+(define a-name (entry-name a)) ; Selector usage:  Get the name of the instance structure and store as another variable
+
+
+a-name ; "Al Abe"
+(entry-email a) ; Selector usage: "lee@x.me"
+(entry? a) ; Predicate usage: "#true"
+```
+
+
+### Using Structures
+Structures can be used within other structure definitions. Example of a bouncing ball which contains a position field and a velocity field (which we first define):
+``` scheme
+(define-struct vel [deltax deltay])
+
+(define-struct balld [location direction])
+
+(define ball1
+    (make-ball (make-posn 30 40) (make-vel -10 5))) ;defines a ball located at (30,40) with velocity components 10 units left and 5 units down
+```
+The `balld` struct is a **nested** data representation of balls because the `location` and `direction` fields are structs of their own. 
+
+The alternative is the **flat** data representation, in which all of the fields are explicitly shown:
+``` scheme
+(define-struct ballf [x y deltax deltay])
+```
+
+## 5.5 Computing with Structures
+In the structure definition of the ball containing two fields (location and velocity):
+``` scheme
+(define-struct ball [location velocity])
+```
+There are two laws introduced:
+``` scheme
+(ball-location (make-ball l0 v0)) == l0
+
+(ball-velocity (make-ball l0 v0)) == v0
+```
+In order to get the x and y components of the location, we need to "nest" our selector queries:
+
+``` scheme
+(vel-deltax (ball-velocity (make-ball l0 v0))) == vX
+```
+
+## 5.6 Programming With Structures
+
+Example of good documentation for a structure of a Ball2D and Ball1D:
+
+```scheme
+; A Vel is a structure: 
+;   (make-vel Number Number)
+; interpretation: (make-vel dx dy) means a velocity of 
+; dx pixels [per tick] along the horizontal and
+; dy pixels [per tick] along the vertical direction
+(define-struct vel [deltax deltay])
+
+; A Ball-1d is a structure:  
+;   (make-ball Number Number)
+; interpretation 1 distance to top and velocity 
+; interpretation 2 distance to left and velocity 
+
+; A Ball-2d is a structure: 
+;   (make-ball Posn Vel)
+; interpretation: a 2-dimensional position and velocity
+
+(define-struct ball [location velocity])
+```
+Ball1D and Ball2D have different meanings, but they use the same struct definition `ball`. We just pass different types of fields into creating them: `location` of a Ball1D takes in `Number` but a Ball2D takes in `Posn`. **Generally, it is recommended that only one use is created for each structure**.
