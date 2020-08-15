@@ -131,3 +131,11 @@ Conditional statement:
     (value_if_true) 
     (value_if_false))
 ```
+
+It is recommended to use the `else` clause in `cond` to avoid unexpected behavior from all of the conditions not being met.
+
+## 4.7 Finite State Worlds
+Finite state machine / automata: A system with a set number of states which transition into other states. 
+
+**Example**: A traffic light which ONLY transitions from red to green, green to orange, and orange to red. 
+<img src="trafficLight.png">
