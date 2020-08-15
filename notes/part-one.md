@@ -112,3 +112,22 @@ To test the correctness of a function, use the functions `(check-expect f out)`.
 
 ; Output: All 3 tests passed!
 ```
+
+## 4.1 Programming With Conditionals
+Conditional statement:
+``` scheme
+(cond
+  [ConditionExpression1 ResultExpression1]
+  [ConditionExpression2 ResultExpression2]
+  ... 
+  [ConditionExpressionN ResultExpressionN])
+  [else DefaultResultExpression]) ;optional
+
+```
+
+**We always use `cond` for situations when we wish to remind the reader of our code that some distinct situations come directly from data definitions**. In a situation with two cases, just use 
+```scheme
+(if (condition) 
+    (value_if_true) 
+    (value_if_false))
+```
