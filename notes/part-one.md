@@ -139,3 +139,22 @@ Finite state machine / automata: A system with a set number of states which tran
 
 **Example**: A traffic light which ONLY transitions from red to green, green to orange, and orange to red. 
 <img src="trafficLight.png">
+
+## 5.4 Defining Structure Types
+Structures like `posn` (a struct with x and y attributes) are defined using `define-struct`. This is how `posn` is defined:
+``` scheme
+(define-struct posn [x y])
+```
+
+This is how any struct is defined in general:
+``` scheme
+(define-struct StructureName [FieldName ...])
+```
+
+The names enclosed in square brackets are called *fields*. A structure that has been created is called a *structure instance* or *structure*. A *structure type* refers to the collection of all possible structure instances.
+
+**A `define-struct` defines THREE functions simultaneously**:
+- A constructor, a function that creates structure instances. **It's always `make-struct`, the word "make" followed by a hyphen, followed by the struct name, followed by all of the field values e.g. `(make-posn 1 2)` creates a coordinate (1,2).**
+- A selector per field, a function which extracts the value of the field from the structure instance. **It's always `struct-field`, the struct name, followed by a hyphen, followed by the field name, followed by the structure instance (e.g. `(posn-x myCoord)`)**.
+- A structure predicate, a function that tells if an instance is of the structure type. **It's always the `struct?`, the struct name with a question mark, followed by the structure instance (e.g. `(posn? myCoord)`)**
+
