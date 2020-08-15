@@ -96,3 +96,19 @@ When designing a function, write out what types of data it takes in, followed by
 (define (area-of-square len) 0)
 ```
 
+## 3.5 On Testing
+To test the correctness of a function, use the functions `(check-expect f out)`. Example:
+``` scheme
+; Number -> Number
+; converts Fahrenheit temperatures to Celsius temperatures 
+ 
+(check-expect (f2c -40) -40)
+(check-expect (f2c 32) 0)
+(check-expect (f2c 212) 100)
+ 
+(define (f2c f)
+  (* 5/9 (- f 32)))
+
+
+; Output: All 3 tests passed!
+```

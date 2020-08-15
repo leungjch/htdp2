@@ -4,5 +4,5 @@
 ; string -> string
 ; produce a string with the last character removed
 (define (string-rest str)
-  (substring str 0 (- (string-length str) 2)))
+  (substring str 0 (- (string-length str) 1)))
 (string-rest "hello")
