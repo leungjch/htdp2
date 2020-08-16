@@ -229,3 +229,4 @@ Example of good documentation for a structure of a Ball2D and Ball1D:
 (define-struct ball [location velocity])
 ```
 Ball1D and Ball2D have different meanings, but they use the same struct definition `ball`. We just pass different types of fields into creating them: `location` of a Ball1D takes in `Number` but a Ball2D takes in `Posn`. **Generally, it is recommended that only one use is created for each structure**.
+
