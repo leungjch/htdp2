@@ -252,6 +252,6 @@
     [stop-when si-game-over? si-render-final]
     [on-key si-control]
     [to-draw si-render]))
-    ;[on-mouse hyper]))
+
 (define initial-state (make-aim (make-posn 200 20) (make-tank 28 -3)))
 (main initial-state)
