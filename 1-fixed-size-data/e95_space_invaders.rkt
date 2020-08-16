@@ -133,8 +133,10 @@
      (make-aim
                (make-posn
                 ; ufo moves left or right randomly
-                (+ (posn-x (aim-ufo s))
-                   (* (random-sign 1) (random (/ WORLDWIDTH 20)))) ; ufo moves left and right randomly
+                ; make sure ufo wraps around edge of screen
+                (modulo (+ (posn-x (aim-ufo s))
+                   (* (random-sign 1) (random (/ WORLDWIDTH 20))))
+                        WORLDWIDTH)
                 ; ufo moves down 1
                 (+ (posn-y (aim-ufo s))
                   1))
@@ -228,10 +230,26 @@
       (make-posn (tank-loc (aim-tank s))
                  (+ 10 TANKAXIS))))]
     [else s]))
+
+; end game screen
+(define (si-render-final s)
+  (cond
+    ; if UFO lands in aim game state, lose
+    ; we can only lose in the aim state,
+    ; so check if we are in the aim state at the end
+    [(aim? s) (text "You lose, the UFO landed." 24 "olive")]
+    ; if missile is out of top of screen in fired state, lose
+    [(fired? s) (if ( <= (posn-y (fired-missile s)) 0)
+                    (text "You lose, the missile didn't hit." 24 "olive")
+                    (text "You win, you hit the UFO!" 24 "olive"))]
+
+    [else (text "Oops, this isn't supposed to be triggered." 24 "olive")]))
+     
+
 (define (main s)
   (big-bang s
     [on-tick si-move]
-    [stop-when si-game-over?]
+    [stop-when si-game-over? si-render-final]
     [on-key si-control]
     [to-draw si-render]))
     ;[on-mouse hyper]))
