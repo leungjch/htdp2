@@ -4,4 +4,6 @@
 ; Posn Number -> Posn
 ; Produces a new Posn p with with the x coordinate being n
 (define (posn-up-X p n)
-  (make-posn n (posn-y p)))
+  (make-posn (+ (posn-x p) n) (posn-y p)))
+(define myPos (make-posn 1 1))
+(posn-up-X myPos 10)
