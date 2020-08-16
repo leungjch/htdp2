@@ -47,7 +47,7 @@
 ; A Missile is a Posn. 
 ; interpretation (make-posn x y) is the missile's place
 (define missile (make-posn 0 0))
-(define missileimage (triangle (/ TANKWIDTH 3) "solid" "black"))
+(define missileimage (triangle (/ TANKWIDTH 3) "solid" "blue"))
 ; Tank Image -> Image 
 ; adds t to the given image im
 (define (tank-render t im)
@@ -66,7 +66,11 @@
 
 ; Missile Image -> Image 
 ; adds m to the given image im
-(define (missile-render m im) im)
+(define (missile-render m im)
+  (place-image missileimage
+               (posn-x m)
+               (posn-y m)
+               im))
 
 ; SIGS -> Image
 ; renders the given game state on top of BACKGROUND 
@@ -88,17 +92,148 @@
 (define (si-game-over? s)
   (cond
     ; check if the UFO landed
-    [(aim? s) (if (>= WORLDHEIGHT (posn-x (aim-ufo s))) #true #false)]
+    ; check if in aim game state first
+    [(aim? s) (if (>= WORLDHEIGHT (posn-y (aim-ufo s))) #false #true )]
 
-    ; check if missile hit UFO (distance < 1)
+    ; check if missile hit UFO 
     ; we must first check that we are in the fired game state
-    ;[(fired? s) ((if (>= WORLDHEIGHT (posn-x (aim-ufo s)))) #t)]
+    [(fired? s)
+     (cond
+       ; if missile is within distance of UFO, end game (win)
+       ; hit if: (missileX - UFOx < 3) && (missileY - UFOy < 3)
+       [(and (< (abs (- (posn-x (fired-missile s))
+                        (posn-x (fired-ufo s))))
+                MISSILEWIDTH)
+             (< (abs (- (posn-y (fired-missile s))
+                        (posn-y (fired-ufo s))))
+                MISSILEHEIGHT))
+        #true]
+       ; if missile moves out of the top of the screen (i.e. y coordinate < 0), end game (loss)
+       [(<= (posn-y (fired-missile s)) 0) #true]
+       [else #false]
+    )]))
+
+; generate random number betweeen 0 and 1
+(define (random-sign c) 
+  (if (= (random 2) 0) -1 1)) 
+
+; check if number is negative.
+(define (check-negative? c) 
+  (cond
+    [(< c 0) #true]
+    [else #false])) 
+
+
+; move every tick
+(define (si-move s)
+  (cond
+    ; if in aim state, return an aim state
+    ; move ufo down and move tank
+    [(aim? s)
+     (make-aim
+               (make-posn
+                ; ufo moves left or right randomly
+                (+ (posn-x (aim-ufo s))
+                   (* (random-sign 1) (random (/ WORLDWIDTH 20)))) ; ufo moves left and right randomly
+                ; ufo moves down 1
+                (+ (posn-y (aim-ufo s))
+                  1))
+
+               ; tank moves at constant velocity, along a constant horizontal axis
+               (make-tank
+                (modulo (+ (tank-vel (aim-tank s))
+                   (tank-loc (aim-tank s))) WORLDWIDTH)
+                (tank-vel (aim-tank s))))
+               ]
+    ; if in fired state, move ufo, tank, and missile
+    [(fired? s)
+     (make-fired
+               (make-posn
+                ; ufo moves left or right randomly
+                (+ (posn-x (fired-ufo s))
+                   (* (random-sign 1) (random (/ WORLDWIDTH 20)))) ; ufo moves left and right randomly
+                ; ufo moves down 1
+                (+ (posn-y (fired-ufo s))
+                  1))
+
+               ; tank moves at constant velocity, along a constant horizontal axis
+               (make-tank
+                (modulo (+ (tank-vel (fired-tank s))
+                   (tank-loc (fired-tank s))) WORLDWIDTH)
+                (tank-vel (fired-tank s)))
+               ; missile moves at constant velocity up
+               (make-posn
+                (posn-x (fired-missile s))
+                (- 
+                   (posn-y (fired-missile s))
+                   10)))]
+
 ))
+
+(define (si-control s a-key)
+  (cond
+    ; check left key
+    ; move tank left if pressed
+    [(key=? a-key "left")
+          (make-aim
+               (make-posn
+                ; ufo moves left or right randomly
+                (+ (posn-x (aim-ufo s))
+                   (* (random-sign 1) (random (/ WORLDWIDTH 20)))) ; ufo moves left and right randomly
+                ; ufo moves down 1
+                (+ (posn-y (aim-ufo s))
+                  1))
+
+               ; switch tank velocity if it is moving right, else keep it
+               (make-tank
+                (modulo (tank-loc (aim-tank s)) WORLDWIDTH)
+                (if (check-negative? (tank-vel (aim-tank s)))
+                    (tank-vel (aim-tank s))
+                    (* -1 (tank-vel (aim-tank s))))))]
+    ; check right key
+    ; move tank right if pressed
+    [(key=? a-key "right")
+          (make-aim
+               (make-posn
+                ; ufo moves left or right randomly
+                (+ (posn-x (aim-ufo s))
+                   (* (random-sign 1) (random (/ WORLDWIDTH 20)))) ; ufo moves left and right randomly
+                ; ufo moves down 1
+                (+ (posn-y (aim-ufo s))
+                  1))
+
+               ; switch tank velocity if it is moving left, else keep it
+               (make-tank
+                (modulo (tank-loc (aim-tank s)) WORLDWIDTH)
+                (if (check-negative? (tank-vel (aim-tank s)))
+                    (* -1 (tank-vel (aim-tank s)))
+                    (tank-vel (aim-tank s))
+                    )))]
+    ; check space key
+    ; fire the missile (new game state)
+    [(key=? a-key " ")
+     ; if the missile is already fired, dont do anything
+     ; else, make the fired state
+     (if (fired? s) s
+     (make-fired
+      ; make ufo
+      (make-posn (posn-x (aim-ufo s))
+                 (posn-y (aim-ufo s)))
+      ; make tank
+      (make-tank (tank-loc (aim-tank s))
+                 (tank-vel (aim-tank s)))
+      ; make missile
+      ; x coordinate equal to tank
+      ; y coordinate slightly above tank
+      (make-posn (tank-loc (aim-tank s))
+                 (+ 10 TANKAXIS))))]
+    [else s]))
 (define (main s)
   (big-bang s
-    ;[on-tick tock]
-    ;[stop-when end-of-screen?]
+    [on-tick si-move]
+    [stop-when si-game-over?]
+    [on-key si-control]
     [to-draw si-render]))
     ;[on-mouse hyper]))
-(define initial-state (make-aim (make-posn 10 20) (make-tank 28 -3)))
+(define initial-state (make-aim (make-posn 200 20) (make-tank 28 -3)))
 (main initial-state)
