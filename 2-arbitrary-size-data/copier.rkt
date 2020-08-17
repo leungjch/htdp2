@@ -6,9 +6,10 @@
 (define (copier n s)
   (cond
     [(zero? n) '()]
-    [else (cons s (copier (sub1 n) s))]))
+    [(positive? n) (cons s (copier (sub1 n) s))]))
+
 ; Examples
 (copier 2 "hello")
-
+(copier -2 0)
 ; Tests
 (check-expect (copier 2 "hello") (cons "hello" (cons "hello" '())))
