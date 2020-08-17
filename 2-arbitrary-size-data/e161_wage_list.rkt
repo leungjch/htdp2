@@ -16,4 +16,3 @@
 ; Tests
 (check-expect (wage* (cons 28 '())) (cons 336 '()))
 (check-expect (wage* (cons 4 (cons 2 '()))) (cons 48 (cons 24 '())))
-
