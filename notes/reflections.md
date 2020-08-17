@@ -9,7 +9,8 @@ Unfortunately, I find myself guilty of being a "bad programmer" by this definiti
 
 ## What  I learned
 - Document your code. Specifically: state the purpose of the function, what valid inputs it takes in and what outputs it produces, examples of the function in use, and tests.
-- Thinking recursively, and the fact that recursion corresponds to mathematical induction
+
+- I finally learned recursion in depth, something that I had always avoided out of fear ever since I learned programming. The only way that I truly understood this concept was through completing many exercises, which the book provides many of.
 - 
 
 ## What I created
