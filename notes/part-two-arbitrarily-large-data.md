@@ -125,10 +125,32 @@ The code implementation of this is shown below.
   (average '()) "Please enter a list of numbers")
   ```
 
-An alternative method of summing list presented uses a different first clause (condition). This function does not accept empty lists (it will raise an error):
+An alternative method of summing list presented uses a different first clause (condition). This function only accepts non-empty lists (it will raise an error):
 ``` scheme
 (define (sum ne-l)
   (cond
     [(empty? (rest ne-l)) (first ne-l)]
     [else (+ (first ne-l) (sum (rest ne-l)))]))
 ```
+
+## 9.3 Natural Numbers
+BSL provides functions that consume lists and produce them. One such function is `make-list` which consumes a number `n` and some value `v`, producing a list containing `n` number of elements of `v`:
+```scheme
+> (make-list 2 "hello")
+(cons "hello" (cons "hello" '()))
+
+> (make-list 3 #true)
+(cons #true (cons #true (cons #true '())))
+
+> (make-list 0 17)
+'()
+```
+The input `n` only accepts natural numbers, whose data definition is the counting numbers from 0 to infinity (0, 1, 2, 3, ...):
+``` scheme
+; An N is one of: 
+; – 0
+; – (add1 N)
+; interpretation represents the counting numbers
+```
+To design a function like `make-list`, use functions and predicates that involve base case (`0`) and the rest of the cases (`add1 N`). The `add1` and `sub1` functions are equivalent to `(+ 1 n)` and `(- n 1)` but are used to signal that the addition is special (i.e. involved in recursion). Also use the predicates `positive?` and `zero?` to check whether we are at the base case 0. 
+
