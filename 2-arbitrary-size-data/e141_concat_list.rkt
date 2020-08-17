@@ -10,6 +10,7 @@
     ; base case: list contains only one element
     [(empty? (rest li)) (first li)]
     [else (string-append (first li) (cat (rest li)))]))
+
 ; Tests
 (define myLi0 (cons "Hello" (cons "World" '())))
 (define myLi1 '())
