@@ -74,14 +74,61 @@ rest
 cons?
 ```
 
-## Designing with Self-Referential Data Definitions
+## 9.0 Designing with Self-Referential Data Definitions
 Self-referential (recursive) functions correspond to proof by induction in mathematics.
 
 The following is a simple function that uses recursion to count the number of strings in a list:
 ``` scheme
+; count number of strings in a list of strings
 (define (how-many alos)
   (cond
     [(empty? alos) 0]
     [else (+ (how-many (rest alos)) 1)]))
 ```
-It first establishes a **base case** (if the list is empty, return 0). The **inductive step** self-references the function with the rest of the list and involves a **combinator**, which combines the values into the proper result. 
+A recursive function works using multiple cases. It first establishes a **base case** (if the list is empty, return 0). The **inductive step** self-references the function with the rest of the list and involves a **combinator**, which combines the values into the proper result. 
+
+## 9.2 Non-empty Lists
+Consider a function that consumes a list of numbers and produces the average of the numbers in the list. This task can't be easily done in a single function with a `cond` expression, and we must break up the task into three subtasks: 
+
+1. A function that sums the numbers in the list
+2. A function that counts the number of items in the list
+3. A function that divides the sum by the number of items in the list
+
+The code implementation of this is shown below.
+``` scheme
+; List-of-temperatures -> Number
+; computes the average temperature 
+(define (average alot)
+  (cond
+    [(empty? alot) "Please enter a list of numbers"]
+    [else (/ (sum alot) (how-many alot))]))
+ 
+; List-of-temperatures -> Number 
+; adds up the temperatures on the given list 
+(define (sum alot)
+  (cond
+    [(empty? alot) 0]
+    [else (+ (first alot) (sum (rest alot)))]))
+ 
+; List-of-temperatures -> Number 
+; counts the temperatures on the given list 
+(define (how-many alot)
+    (cond
+    [(empty? alot) 0]
+    [else (+ 1 (how-many (rest alot)))]))
+
+
+; Tests
+(check-expect
+  (average (cons 1 (cons 2 (cons 3 '())))) 2)
+(check-expect
+  (average '()) "Please enter a list of numbers")
+  ```
+
+An alternative method of summing list presented uses a different first clause (condition). This function does not accept empty lists (it will raise an error):
+``` scheme
+(define (sum ne-l)
+  (cond
+    [(empty? (rest ne-l)) (first ne-l)]
+    [else (+ (first ne-l) (sum (rest ne-l)))]))
+```

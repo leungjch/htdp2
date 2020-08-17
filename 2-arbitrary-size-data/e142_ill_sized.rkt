@@ -22,4 +22,4 @@
 (define myrect1 (rectangle 10 20 "solid" "black"))
 (define myrect2 (rectangle 50 50 "solid" "red"))
 (define mylist (cons myrect2 (cons mysquare (cons myrect1 (cons mysquare '())))))
-(ill-sized? mylist 10)
+(check-expect (ill-sized? mylist 10) myrect2)
