@@ -154,3 +154,30 @@ The input `n` only accepts natural numbers, whose data definition is the countin
 ```
 To design a function like `make-list`, use functions and predicates that involve base case (`0`) and the rest of the cases (`add1 N`). The `add1` and `sub1` functions are equivalent to `(+ 1 n)` and `(- n 1)` but are used to signal that the addition is special (i.e. involved in recursion). Also use the predicates `positive?` and `zero?` to check whether we are at the base case 0. 
 
+## 9.4 Russian Dolls (Recursion on Structs)
+
+This section generalizes recursive techniques on custom defined structures, such as a "Russian doll"
+
+``` scheme
+; An RD (short for Russian doll) is one of: 
+; – String 
+; – (make-layer String RD)
+(define-struct layer [color doll])
+```
+To make a Russian doll, we nest layers:
+``` scheme
+(make-layer "yellow" (make-layer "green" "red"))
+```
+
+An example function to work on Russian dolls is to generate a single string joining all of the colors of the Russian doll. This is the function that recursively loops into the doll to find the inner one using selectors `layer-doll`, which is analogous to `rest` or `cdr` in a list, and `layer-color`, which is analogous to `first` or `car`.
+``` scheme
+; RD -> String
+; consumes a Russian doll and produces a string of all colors, separated by a comma and a space
+(define (colors rd)
+  (cond
+    ; base case - the doll is a String type, not another layer
+    ; return inner doll string
+    [(string? rd)  rd]
+    [else
+     (string-append (layer-color rd) ", " (colors (layer-doll rd)))]))
+```

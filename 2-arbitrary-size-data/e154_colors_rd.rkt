@@ -15,7 +15,6 @@
     ; base case - the doll is a String type, not another layer
     ; return inner doll string
     [(string? rd)  rd]
-
     [else
      (string-append (layer-color rd) ", " (colors (layer-doll rd)))]))
 

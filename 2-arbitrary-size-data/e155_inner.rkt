@@ -9,12 +9,13 @@
 ;(make-layer "pink" (make-layer "black" "white"))
 
 ; RD -> String
-; consumes a Russian doll and produces a string of all colors, separated by a comma and a space
+; consumes a Russian doll and produces the string of the inner color
 (define (inner rd)
   (cond
     ; base case - the doll is a String type, not another layer
     ; return inner doll string
     [(string? rd)  rd]
+    ; recursive step
     [else
      (inner (layer-doll rd))]))
 
