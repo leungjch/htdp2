@@ -7,7 +7,7 @@
   (cond
     [(zero? n) 0]
     [else (+ x (multiply (sub1 n) x))]))
-(multiply 10 3)
+(multiply 2 3)
 
 ;(check-within (add-to-pi 3) (+ 3 pi) 0.001)
  
