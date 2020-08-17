@@ -223,3 +223,57 @@ ordering|critical|irrelevant
 |# of occurrences|sensible|irrelevant
 size|finite but arbitrary|finite or infinite
 
+# 10.2 Structures in Lists
+The following is a data structure describing the name, pay rate, and number of hours worked, for an employee:
+``` scheme
+(define-struct work [employee rate hours])
+; A (piece of) Work is a structure: 
+;   (make-work String Number Number)
+; interpretation (make-work n r h) combines the name 
+; with the pay rate r and the number of hours h
+```
+To put it into a list, we use
+``` scheme
+; Low (short for list of works) is one of: 
+; – '()
+; – (cons Work Low)
+; interpretation: an instance of Low represents the 
+; hours worked for a number of employees
+
+Examples:
+'() ; Empty Low
+(cons (make-work "Robby" 11.95 39)
+      '()) ; Low with one worker
+(cons (make-work "Matthew" 12.95 45)
+      (cons (make-work "Robby" 11.95 39)
+            '())) ; Low with two workers
+```
+
+To design a function that works on a list of structures, use the **selectors**. Template:
+``` scheme
+(define (wage*.v2 an-low)
+  (cond
+    [(empty? an-low) ...]
+    [(cons? an-low)
+     (... (first an-low) ...
+      ... ... (work-employee (first an-low)) ...
+      ... ... (work-rate (first an-low)) ...
+      ... ... (work-hours (first an-low)) ...
+      (wage*.v2 (rest an-low)) ...)]))
+```
+The above example is quite long. We can split the processing of the `work` structure into a separate function. The recommended template is thus:
+```scheme
+(define (wage*.v2 an-low)
+  (cond
+    [(empty? an-low) ...]
+    [(cons? an-low)
+     (... (for-work (first an-low))
+      ... (wage*.v2 (rest an-low)) ...)]))
+ 
+; Work -> ???
+; a template for processing elements of Work
+(define (for-work w)
+  (... (work-employee w) ...
+   ... (work-rate w) ...
+   ... (work-hours w) ...))
+```
