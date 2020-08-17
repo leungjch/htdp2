@@ -181,3 +181,45 @@ An example function to work on Russian dolls is to generate a single string join
     [else
      (string-append (layer-color rd) ", " (colors (layer-doll rd)))]))
 ```
+
+## 9.6 A Note on List and Sets
+There is no special definition of a set in BSL, but we can define a Son (**set of numbers**) in two different ways:
+```scheme
+; A Son.L is one of: 
+; – empty 
+; – (cons Number Son.L)
+; 
+; Son is used when it 
+; applies to Son.L and Son.R
+  
+
+; A Son.R is one of: 
+; – empty 
+; – (cons Number Son.R)
+; 
+; Constraint If s is a Son.R, 
+; no number occurs twice in s
+```
+From the definitions above, both say that a set is represnted as a list of numbers. The second definition `Son.R` has a constraint that no number can occur more than once in the list.
+
+We can define two notions about sets from this:
+``` scheme
+; Son (set of numbers)
+; The Empty Set
+(define es '())
+ 
+; Number Son -> Boolean
+; The membership test
+; is x in s
+(define (in? x s)
+  (member? x s))
+```
+Summary table of characteristics and differences betewen lists and sets:
+
+property|lists|sets
+---|---|---|
+membership|one among many|critical
+ordering|critical|irrelevant
+|# of occurrences|sensible|irrelevant
+size|finite but arbitrary|finite or infinite
+
