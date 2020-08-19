@@ -277,3 +277,5 @@ The above example is quite long. We can split the processing of the `work` struc
    ... (work-rate w) ...
    ... (work-hours w) ...))
 ```
+
+For a nice simple example of a function that consumes a list and produces a different list:

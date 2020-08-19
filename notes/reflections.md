@@ -8,10 +8,12 @@ I was also just interested in becoming a better programmer in general, and a sys
 Unfortunately, I find myself guilty of being a "bad programmer" by this definition sometimes. Sure, I can build however many side projects I like, but I'm not really building my skills if I'm writing undocumented spaghetti code that even my own self would get confused if I read it a week later. I hope that this book furthered my abilities in these aspects.
 
 ## What  I learned
-- Document your code. Specifically: state the purpose of the function, what valid inputs it takes in and what outputs it produces, examples of the function in use, and tests.
+- Document your code. Specifically: state the purpose of the function, what valid inputs it takes in and what outputs it produces, and provide examples of the function in use. This helps not only other people but your future self who may revisit this code later.
+
+- Make test cases for the functions (or any piece of code) that you write, i.e. for a given input, state what output your function should produce. In Racket, the `check-expect` function was used a lot for testing.
 
 - I finally learned recursion in depth, something that I had always avoided out of fear ever since I learned programming. The only way that I truly understood this concept was through completing many exercises, which the book provides many of.
-- 
+
 
 ## What I created
 - Defining the addition and multiplication operators on the natural numbers using a recursive function involving the successor and predecessor
