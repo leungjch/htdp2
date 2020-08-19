@@ -35,7 +35,27 @@ The design recipe is an integral part of HtDP. It's a systematic approach to dev
 (check-expect (sum-of-squares 0 2.5) 6.25)
 ```
 
+# Data Definitions
+A data definition specifies how to represent a piece of information in the real world as data in a program. It also provides documentation on how to interpret the data back into information. It also provides a template and examples for how to operate on the data.
 
+For example, consider modelling a traffic light. Here is a function that provides the next colour in a traffic light:
+``` scheme
+(define (next-color c)
+    (cond 
+        [(= c 0) 2])
+        [(= c 1) 1])
+        [(= c 2) 0])))
+```
+Although we can understand what the function does, we do not understand the data that it is acting on. What is `c`? Can c be 3 or more, or negative? 
 
+The problem of ambiguity can be solved by providing a data definition:
+``` scheme
+;; TLColor is one of:
+;; - 0
+;; - 1
+;; - 2
+;; interpretation: the color of a traffic light: 0 is red, 1 yellow, 2 green
+```
+We now see that `c` must be a `TLColor` and therefore can only be 0, 1, or 2. We also know that `c` represents the color of a traffic light, even if it maps to a natural number.
 
 
