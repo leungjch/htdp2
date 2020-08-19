@@ -16,8 +16,8 @@
 (define matrix (cons r1 (cons r2 (cons r3 '()))))
 (define transposed (cons (cons 1 (cons 3 (cons 5 '())))
                          (cons
-                          (cons 2 (cons 4 (cons 6 '()))))
-                         '())
+                          (cons 2 (cons 4 (cons 6 '())))
+                         '())))
 
 ; matrix -> list
 ; generate a column from a matrix
