@@ -14,13 +14,10 @@
 (define r2 (cons 3 (cons 4 '())))
 (define r3 (cons 5 (cons 6 '())))
 (define matrix (cons r1 (cons r2 (cons r3 '()))))
-matrix
-(first matrix)
-(rest matrix)
-
-(first (first matrix))
-(first (first (rest matrix)))
-(first (first (rest (rest matrix))))
+(define transposed (cons (cons 1 (cons 3 (cons 5 '())))
+                         (cons
+                          (cons 2 (cons 4 (cons 6 '()))))
+                         '())
 
 ; matrix -> list
 ; generate a column from a matrix
@@ -43,7 +40,8 @@ matrix
 
 (first* matrix)
 (rest* matrix)
-;(define (transpose lln)
-;  (cond
-;    [(empty? (first lln)) '()]
-;    [else (cons (first* lln) (transpose (rest* lln)))]))
+(define (transpose lln)
+  (cond
+    [(empty? (first lln)) '()]
+    [else (cons (first* lln) (transpose (rest* lln)))]))
+(check-expect (transpose matrix) transposed)
